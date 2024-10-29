@@ -1,0 +1,137 @@
+{
+	"info": {
+		"_postman_id": "83e19363-94ad-42b7-8580-54336711c276",
+		"name": "ADSO Iván",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "8215629"
+	},
+	"item": [
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Sign up",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test1_username\",\n    \"email\": \"test1@email.com\",\n    \"password\": \"test1234\",\n    \"firstName\": \"test firstName\",\n    \"lastName\": \"test lastName\",\n    \"birthDate\": \"2000-10-10\",\n    \"biography\": \"test biography\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/users/sign-up/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								"sign-up",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Log in",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"username\": \"test1_username\",\n    \"password\": \"test1234\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/users/login/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								"login",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Token Refresh",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"refresh\": \"eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoicmVmcmVzaCIsImV4cCI6MTcyOTU1MjY4MSwiaWF0IjoxNzI5NDY2MjgxLCJqdGkiOiJhMGY0NDE3MTA2NmE0ZjgxOTU0NWFiNWNhZTM5MTFkNyIsInVzZXJfaWQiOjExfQ.5BwZCGt0Q-5AeA9d_CXR_pOfSFjPuIMfFkruC69XJbg\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "http://localhost:8000/users/token/refresh/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								"token",
+								"refresh",
+								""
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get profile",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0b2tlbl90eXBlIjoiYWNjZXNzIiwiZXhwIjoxNzI5NDY2OTgwLCJpYXQiOjE3Mjk0NjYyODEsImp0aSI6IjRlZjdmNDg0ZjIwNzQ4MGY5OTQwYWM1MmYxN2VjMDBlIiwidXNlcl9pZCI6MTF9.J931dfnFOalIRruILJE7U0vMQQ2rsY-j7XEtjoa0HIc",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://localhost:8000/users/my-profile/",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "8000",
+							"path": [
+								"users",
+								"my-profile",
+								""
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
