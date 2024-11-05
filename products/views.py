@@ -1,70 +1,48 @@
-import json
-from django.http import HttpResponse, JsonResponse
+from rest_framework import status
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Products
-from django.views.decorators.csrf import csrf_exempt
+from .models import Products, UsersProducts
+from .serializers import ProductSerializer, UsersProductSerializer
 
-from .serializers import ProductSerializer
-
-
-# Create your views here.
-@csrf_exempt
-def index(request, pk=None):
-    """
-    Default endpoint for Products application.
-    """
-
-    if request.method == "GET":
-        if pk:
-            products = Products.objects.get(id=pk)
-            return JsonResponse(data={"message": "ok",
-                                      "id": products.id,
-                                      "name": products.product_name,
-                                      "price": products.product_price,
-                                      "stock": products.product_stock})
-        else:
-            products = list(Products.objects.all().values("id",
-                                                          "product_name",
-                                                          "product_price",
-                                                          "product_type",
-                                                          "product_stock"))
-
-            return JsonResponse(data={"message": "ok", "products": products})
-
-
-        # products_list = Products.objects.all()
-        # template = loader.get_template('products/index.html')
-        # message = {"products_list": products_list}
-        # return HttpResponse(template.render(message, request))
-
-    if request.method == 'POST':
-        
-        body = request.body.decode('utf-8')
-        request_body = json.loads(body)   
-        
-        product = Products.objects.create(
-            product_name = request_body['name'],
-            product_price = request_body['price'],
-            product_type = request_body['type'],
-            product_stock = request_body['stock']
-        )
-        
-        return JsonResponse(data={'message': 'OK',
-                                  'name': product.product_name,
-                                  'price': product.product_price})
-
-    if request.method == "DELETE":
-        if pk:
-            Products.objects.filter(id=pk).delete()
-            return JsonResponse(data={"message": "Product with id = " + str(pk) + " deleted"})
-
-    return HttpResponse("Method not allowed", status=405)
 
 class ProductsView(APIView):
-    def get(self, request):
-        products = Products.objects.all()
-        serializer = ProductSerializer(products, many=True)
+    """
+
+    """
+    def get(self, request, product_id: int = None):
+        if product_id:
+            try:
+                product = Products.objects.get(id=product_id)
+                serializer = ProductSerializer(product)
+            except Products.DoesNotExist:
+                return Response("Product does not exist.", status=status.HTTP_404_NOT_FOUND)
+        else:
+            products = Products.objects.all()
+            serializer = ProductSerializer(products, many=True)
+
         return Response(serializer.data)
+
+
+class UsersProductsView(APIView):
+    """
+
+    """
+    def get(self, request):
+        pass
+
+    def post(self, request):
+        """
+
+        """
+        serialized = UsersProductSerializer(data=request.data)
+        serialized.is_valid(raise_exception=True)
+
+        # if UsersProducts.objects.filter(username=serialized.validated_data['product']).exists():
+        #     return Response("Purchase already exists.", status=status.HTTP_400_BAD_REQUEST)
+
+        users_products = UsersProducts.objects.create(**serialized.validated_data)
+
+        return Response({"message": "Successfully transaction"}, status=status.HTTP_201_CREATED)
+
 
