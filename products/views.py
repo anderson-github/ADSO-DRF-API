@@ -28,8 +28,16 @@ class UsersProductsView(APIView):
     """
 
     """
-    def get(self, request):
-        pass
+    def get(self, request, user_id: int = None):
+        if user_id:
+            user_products = UsersProducts.objects.filter(user_id=user_id)
+        else:
+            user_products = UsersProducts.objects.all()
+
+        serializer = UsersProductSerializer(user_products, many=True)
+        return Response(serializer.data)
+
+
 
     def post(self, request):
         """
@@ -42,7 +50,6 @@ class UsersProductsView(APIView):
         #     return Response("Purchase already exists.", status=status.HTTP_400_BAD_REQUEST)
 
         users_products = UsersProducts.objects.create(**serialized.validated_data)
-
         return Response({"message": "Successfully transaction"}, status=status.HTTP_201_CREATED)
 
 
